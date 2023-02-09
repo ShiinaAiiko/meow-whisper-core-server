@@ -21,7 +21,13 @@ func (r Routerv1) InitContact() {
 	}
 
 	r.Group.GET(
-		role.SetRole(apiUrl["searchContact"], &protoOption),
+		role.SetRole(apiUrl["searchContact"], &middleware.RoleOptionsType{
+			Authorize:          false,
+			RequestEncryption:  true,
+			ResponseEncryption: true,
+			CheckAppId:         true,
+			ResponseDataType:   "protobuf",
+		}),
 		c.SearchContact)
 
 	r.Group.GET(
