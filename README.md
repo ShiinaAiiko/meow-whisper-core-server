@@ -1,2 +1,2 @@
-# meow-whisper-core-server
-meow-whisper-core-server
+# meow-whisper-web-server
+Golang web backend project for Meow Whisper.
