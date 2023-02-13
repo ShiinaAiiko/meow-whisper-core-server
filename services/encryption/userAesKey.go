@@ -18,7 +18,7 @@ func (e *EncryptionOption) GetUserAesKeyByDeviceId(rdb *nredis.NRedis, deviceId 
 	userAesKey := new(UserAESKey)
 	rKey := rdb.GetKey("User-AESKey")
 	err := rdb.GetStruct(rKey.GetKey("deviceId"+deviceId), &userAesKey)
-	log.Warn("UserAesKey 获取成功", err)
+	log.Warn("UserAesKey 获取成功", deviceId, userAesKey, err)
 	if err != nil {
 		log.Error(err)
 		return nil
@@ -51,11 +51,13 @@ func (e *EncryptionOption) SetUserAesKey(rdb *nredis.NRedis, aesKeyMd5 string, u
 	if err != nil {
 		return
 	}
-	err = rdb.SetStruct(rKey.GetKey("key"+key), &userAesKey, rKey.GetExpiration())
-	if err != nil {
-		return
+
+	if err = rdb.SetStruct(rKey.GetKey("key"+key), &userAesKey, rKey.GetExpiration()); err != nil {
+		log.Error(err)
 	}
 	// err = rdb.SetStruct(rKey.GetKey("uid"+nstrings.ToString(uid)), &aesKeyMd5, rKey.GetExpiration())
-	err = rdb.SetStruct(rKey.GetKey("deviceId"+deviceId), &userAesKey, rKey.GetExpiration())
+	if err = rdb.SetStruct(rKey.GetKey("deviceId"+deviceId), &userAesKey, rKey.GetExpiration()); err != nil {
+		log.Error(err)
+	}
 	return
 }

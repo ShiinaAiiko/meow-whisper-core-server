@@ -72,7 +72,7 @@ func Decryption() nsocketio.HandlerFunc {
 			return
 		}
 
-		userInfo := ui.(*sso.AnonymousUserInfo)
+		userInfo := ui.(*sso.UserInfo)
 		deviceId := e.GetSessionCache("deviceId").(string)
 
 		// log.Info(userAesKey, userInfo, userAesKey.Uid != userInfo.Uid || userAesKey.DeviceId != userInfo.UserAgent.DeviceId)

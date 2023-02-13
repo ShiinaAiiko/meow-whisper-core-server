@@ -2,7 +2,6 @@ package conf
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 
 	"github.com/ShiinaAiiko/meow-whisper-core/services/typings"
@@ -13,16 +12,16 @@ import (
 )
 
 var (
-	Config  *typings.Config
-	SSO     *sso.SakiSSO
-	SAaSS   *saass.SAaSS
-	SSOList map[string]*sso.SakiSSO = map[string]*sso.SakiSSO{}
-	log                             = nlog.New()
+	Config *typings.Config
+	SSO    *sso.SakiSSO
+	SAaSS  *saass.SAaSS
+	// SSOList map[string]*sso.SakiSSO = map[string]*sso.SakiSSO{}
+	log = nlog.New()
 )
 
-func GetSSO(appId string) *sso.SakiSSO {
-	return SSOList[appId]
-}
+// func GetSSO(appId string) *sso.SakiSSO {
+// 	return SSOList[appId]
+// }
 
 func GetConfig(configPath string) {
 	jsonFile, _ := os.Open(configPath)
@@ -34,7 +33,7 @@ func GetConfig(configPath string) {
 	//Decode从输入流读取下一个json编码值并保存在v指向的值里
 	err := decoder.Decode(&conf)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Error("Error:", err)
 	}
 	Config = conf
 }

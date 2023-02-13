@@ -4,8 +4,6 @@ import (
 
 	// "github.com/cherrai/saki-sso-go"
 
-	"time"
-
 	"github.com/ShiinaAiiko/meow-whisper-core/api"
 	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
 	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
@@ -95,7 +93,7 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 	ua := new(sso.UserAgent)
 	copier.Copy(ua, queryData.UserAgent)
 
-	getUser, err := conf.GetSSO(queryData.AppId).AnonymousUser.VerifyUserToken(queryData.Token, queryData.DeviceId, ua)
+	getUser, err := conf.SSO.Verify(queryData.Token, queryData.DeviceId, ua)
 	// log.Info("getUser", getUser, err)
 	if err != nil || getUser == nil || getUser.UserInfo.Uid == "" {
 		res.Code = 10004
@@ -106,11 +104,11 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 	} else {
 
 		// 检测之前是否登录过了，登录过把之前的实例干掉
-		ccList := conf.SocketIO.GetConnContextByTag(namespace["base"], "DeviceId", getUser.DeviceId)
+		ccList := conf.SocketIO.GetConnContextByTag(namespace["base"], "DeviceId", queryData.DeviceId)
 		// log.Info("检测之前是否登录过了，登录过把之前的实例干掉", len(ccList))
 		for _, v := range ccList {
 			// log.Info("1、发送信息告知对方下线")
-			userAesKey := conf.EncryptionClient.GetUserAesKeyByDeviceId(conf.Redisdb, getUser.DeviceId)
+			userAesKey := conf.EncryptionClient.GetUserAesKeyByDeviceId(conf.Redisdb, queryData.DeviceId)
 			// log.Info("userAesKey", userAesKey)
 			if userAesKey != nil {
 				var res response.ResponseProtobufType
@@ -129,13 +127,13 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 		}
 		log.Info("/ UID " + getUser.UserInfo.Uid + ", Connection to Successful.")
 
-		c.SetSessionCache("loginTime", time.Now().Unix())
+		c.SetSessionCache("loginTime", getUser.LoginInfo.LoginTime)
 		c.SetSessionCache("appId", queryData.AppId)
-		c.SetSessionCache("userInfo", &getUser.UserInfo)
+		c.SetSessionCache("userInfo", getUser.UserInfo)
 		c.SetSessionCache("deviceId", queryData.DeviceId)
 		c.SetSessionCache("userAgent", ua)
 		c.SetTag("Uid", getUser.UserInfo.Uid)
-		c.SetTag("DeviceId", getUser.DeviceId)
+		c.SetTag("DeviceId", queryData.DeviceId)
 
 		// log.Info("SocketIO Client连接成功：", Conn.ID())
 

@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/copier"
 )
 
-func FormatGroupMembers(gm *protos.GroupMembers, users []*sso.SimpleAnonymousUserInfo) {
+func FormatGroupMembers(gm *protos.GroupMembers, users []*sso.UserInfo) {
 	for i, j := 0, len(users)-1; i <= j; i, j = i+1, j-1 {
 		if FormatGroupMembersSimpleAnonymousUserInfo(gm, users[i]) {
 			break
@@ -18,9 +18,9 @@ func FormatGroupMembers(gm *protos.GroupMembers, users []*sso.SimpleAnonymousUse
 	}
 }
 
-func FormatGroupMembersSimpleAnonymousUserInfo(gm *protos.GroupMembers, user *sso.SimpleAnonymousUserInfo) bool {
+func FormatGroupMembersSimpleAnonymousUserInfo(gm *protos.GroupMembers, user *sso.UserInfo) bool {
 	if user.Uid == gm.AuthorId {
-		sa := new(protos.SimpleAnonymousUserInfo)
+		sa := new(protos.SimpleSSOUserInfo)
 		copier.Copy(sa, user)
 		sa.Letter = nstrings.GetLetter(sa.Nickname)
 		gm.UserInfo = sa

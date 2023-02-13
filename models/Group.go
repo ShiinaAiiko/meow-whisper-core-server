@@ -83,7 +83,7 @@ func (m *Group) Default() error {
 		m.DeleteTime = -1
 	}
 	if m.LastMessageTime == 0 {
-		m.LastMessageTime = -1
+		m.LastMessageTime = time.Now().Unix()
 	}
 
 	if err := m.Validate(); err != nil {

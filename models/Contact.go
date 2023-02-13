@@ -39,12 +39,12 @@ type Contact struct {
 	// 1 normal
 	// 0 ban speech
 	// -1 deleted
-	Status          int64              `bson:"status" json:"status,omitempty"`
-	CreateTime      int64              `bson:"createTime" json:"createTime,omitempty"`
-	DeleteTime      int64              `bson:"deleteTime" json:"deleteTime,omitempty"`
-	LastMessage     primitive.ObjectID `bson:"lastMessage" json:"lastMessage,omitempty"`
-	LastSeenTime    int64              `bson:"lastSeenTime" json:"lastSeenTime,omitempty"`
-	LastMessageTime int64              `bson:"lastMessageTime" json:"lastMessageTime,omitempty"`
+	Status      int64              `bson:"status" json:"status,omitempty"`
+	CreateTime  int64              `bson:"createTime" json:"createTime,omitempty"`
+	DeleteTime  int64              `bson:"deleteTime" json:"deleteTime,omitempty"`
+	LastMessage primitive.ObjectID `bson:"lastMessage" json:"lastMessage,omitempty"`
+	// LastSeenTime    int64              `bson:"lastSeenTime" json:"lastSeenTime,omitempty"`
+	LastMessageTime int64 `bson:"lastMessageTime" json:"lastMessageTime,omitempty"`
 }
 
 func (m *Contact) GetCollectionName() string {
@@ -70,11 +70,11 @@ func (m *Contact) Default() error {
 		m.DeleteTime = -1
 	}
 	if m.LastMessageTime == 0 {
-		m.LastMessageTime = -1
+		m.LastMessageTime = time.Now().Unix()
 	}
-	if m.LastSeenTime == 0 {
-		m.LastSeenTime = -1
-	}
+	// if m.LastSeenTime == 0 {
+	// 	m.LastSeenTime = -1
+	// }
 
 	if err := m.Validate(); err != nil {
 		return errors.New(m.GetCollectionName() + " Validate: " + err.Error())
@@ -104,7 +104,7 @@ func (m *Contact) Validate() error {
 		validation.Parameter(&m.Status, validation.Enum([]int64{1, 0, -1})),
 		validation.Parameter(&m.CreateTime, validation.Required()),
 		validation.Parameter(&m.DeleteTime, validation.Required()),
-		validation.Parameter(&m.LastSeenTime, validation.Required()),
+		// validation.Parameter(&m.LastSeenTime, validation.Required()),
 		validation.Parameter(&m.LastMessageTime, validation.Required()),
 	)
 	if err != nil {

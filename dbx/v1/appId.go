@@ -7,11 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type AppIdDbx struct {
+type AppDbx struct {
 }
 
-func (d *AppIdDbx) CreateApp(name string, avatar string) (*models.AppId, error) {
-	app := models.AppId{
+func (d *AppDbx) CreateApp(name string, avatar string) (*models.App, error) {
+	app := models.App{
 		Avatar: avatar,
 		Name:   name,
 	}
@@ -25,9 +25,9 @@ func (d *AppIdDbx) CreateApp(name string, avatar string) (*models.AppId, error) 
 	return &app, nil
 }
 
-func (cr *AppIdDbx) GetAppByName(name string) *models.AppId {
+func (cr *AppDbx) GetAppByName(name string) *models.App {
 	// 后续启用redis
-	app := new(models.AppId)
+	app := new(models.App)
 
 	filter := bson.M{
 		"name": name,

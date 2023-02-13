@@ -46,8 +46,8 @@ type GroupMembers struct {
 	// CreateTime Unix timestamp
 	CreateTime int64 `bson:"createTime" json:"createTime,omitempty"`
 
-	LastSeenTime int64              `bson:"lastSeenTime" json:"lastSeenTime,omitempty"`
-	LastMessage  primitive.ObjectID `bson:"lastMessage" json:"lastMessage,omitempty"`
+	// LastSeenTime int64              `bson:"lastSeenTime" json:"lastSeenTime,omitempty"`
+	LastMessage primitive.ObjectID `bson:"lastMessage" json:"lastMessage,omitempty"`
 	// LastMessageTime Unix timestamp
 	LastMessageTime int64 `bson:"lastMessageTime" json:"lastMessageTime,omitempty"`
 }
@@ -76,12 +76,12 @@ func (m *GroupMembers) Default() error {
 	if m.CreateTime == 0 {
 		m.CreateTime = unixTimeStamp
 	}
-	if m.LastSeenTime == 0 {
-		m.LastSeenTime = -1
-	}
+	// if m.LastSeenTime == 0 {
+	// 	m.LastSeenTime = -1
+	// }
 
 	if m.LastMessageTime == 0 {
-		m.LastMessageTime = -1
+		m.LastMessageTime = time.Now().Unix()
 	}
 
 	if err := m.Validate(); err != nil {
@@ -111,7 +111,7 @@ func (m *GroupMembers) Validate() error {
 		validation.Parameter(&m.AuthorId, validation.Required()),
 		validation.Parameter(&m.Status, validation.Enum([]int64{1, -1})),
 		validation.Parameter(&m.CreateTime, validation.Required()),
-		validation.Parameter(&m.LastSeenTime, validation.Required()),
+		// validation.Parameter(&m.LastSeenTime, validation.Required()),
 		validation.Parameter(&m.LastMessageTime, validation.Required()),
 	)
 	if err != nil {

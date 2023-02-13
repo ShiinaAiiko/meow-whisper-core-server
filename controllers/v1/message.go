@@ -41,7 +41,7 @@ func (fc *MessageController) GetRecentChatDialogueList(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 	appId := c.GetString("appId")
 	list := []*protos.ChatDialogue{}
 
@@ -53,8 +53,10 @@ func (fc *MessageController) GetRecentChatDialogueList(c *gin.Context) {
 	// messgeIdsMap := map[string]primitive.ObjectID{}
 
 	// 获取所有聊天过的好友关系
+	// 未来预留 一年内的
 	getContact, err := contactDbx.GetAllContact(appId, userInfo.Uid, []int64{
 		1540947600, 0,
+		// 1540947600, time.Now().Unix(),
 	})
 	if err != nil {
 		res.Code = 10001
@@ -84,6 +86,7 @@ func (fc *MessageController) GetRecentChatDialogueList(c *gin.Context) {
 		list = append(list, cd)
 	}
 	// 获取所有聊天过群组关系
+	// 未来预留 一年内的
 	getGroup, err := groupDbx.GetAllJoinedGroups(appId, userInfo.Uid)
 	// log.Info("getGroup", getGroup)
 
@@ -216,7 +219,7 @@ func (fc *MessageController) GetHistoricalMessages(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 	appId := c.GetString("appId")
 
 	// 判断是否在此room内
@@ -309,7 +312,7 @@ func (fc *MessageController) ReadAllMessages(c *gin.Context) {
 		return
 	}
 
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 	appId := c.GetString("appId")
 	deviceId := c.GetString("deviceId")
 
@@ -384,7 +387,7 @@ func (fc *MessageController) DeleteMessages(c *gin.Context) {
 		return
 	}
 
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 	deviceId := c.GetString("deviceId")
 
 	if data.Type == "MySelf" {

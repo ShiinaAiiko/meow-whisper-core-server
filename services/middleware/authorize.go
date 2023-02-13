@@ -82,9 +82,8 @@ func Authorize() gin.HandlerFunc {
 					c.Abort()
 					return
 				}
-				log.Info(c.GetString("appId"), conf.GetSSO(c.GetString("appId")))
 				// Log.Info("token, deviceId, userAgent", token, deviceId, userAgent)
-				v, err := conf.GetSSO(c.GetString("appId")).AnonymousUser.VerifyUserToken(token, deviceId, userAgent)
+				v, err := conf.SSO.Verify(token, deviceId, userAgent)
 				// Log.Info("ret", ret, err)
 				if err != nil {
 					// Log.Info("jwt: ", err)
@@ -101,7 +100,7 @@ func Authorize() gin.HandlerFunc {
 						userAesKeyInterface, err := c.Get("userAesKey")
 						if userAesKeyInterface != nil || !err {
 							userAesKey := userAesKeyInterface.(*encryption.UserAESKey)
-							if userAesKey.Uid != v.UserInfo.Uid || userAesKey.DeviceId != v.DeviceId {
+							if userAesKey.Uid != v.UserInfo.Uid || userAesKey.DeviceId != v.LoginInfo.DeviceId {
 								res.Code = 10008
 								res.Call(c)
 								c.Abort()
@@ -109,7 +108,7 @@ func Authorize() gin.HandlerFunc {
 							}
 						}
 					}
-					c.Set("userInfo", &v.UserInfo)
+					c.Set("userInfo", v.UserInfo)
 					c.Next()
 					return
 				}

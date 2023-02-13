@@ -1,12 +1,10 @@
 package controllersV1
 
 import (
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
 	"github.com/ShiinaAiiko/meow-whisper-core/protos"
 	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
 
 	"github.com/cherrai/nyanyago-utils/validation"
-	sso "github.com/cherrai/saki-sso-go"
 	"github.com/gin-gonic/gin"
 )
 
@@ -41,33 +39,33 @@ func (ac *SSOController) CreateAppToken(c *gin.Context) {
 		return
 	}
 
-	ua, exists := c.Get("userAgent")
-	if !exists {
-		res.Error = "UserAgent does not exist."
-		res.Code = 10002
-		res.Call(c)
-	}
-	userAgent := ua.(*sso.UserAgent)
-	token := c.GetString("token")
-	deviceId := c.GetString("deviceId")
+	// ua, exists := c.Get("userAgent")
+	// if !exists {
+	// 	res.Error = "UserAgent does not exist."
+	// 	res.Code = 10002
+	// 	res.Call(c)
+	// }
+	// userAgent := ua.(*sso.UserAgent)
+	// token := c.GetString("token")
+	// deviceId := c.GetString("deviceId")
 
-	// 4、校验登录
-	t, err := conf.GetSSO(data.AppId).AnonymousUser.GetAppToken(token, deviceId, userAgent)
+	// // 4、校验登录
+	// t, err := conf.GetSSO(data.AppId).AnonymousUser.GetAppToken(token, deviceId, userAgent)
 
-	if err != nil || t == nil || t.Token == "" {
-		res.Errors(err)
-		res.Code = 10018
-		res.Call(c)
-		return
-	}
+	// if err != nil || t == nil || t.Token == "" {
+	// 	res.Errors(err)
+	// 	res.Code = 10018
+	// 	res.Call(c)
+	// 	return
+	// }
 	// 6、合并用户数据
 
-	responseData := protos.CreateAppToken_Response{
-		Token:      t.Token,
-		CreateTime: t.CreateTime,
-	}
+	// responseData := protos.CreateAppToken_Response{
+	// 	Token:      t.Token,
+	// 	CreateTime: t.CreateTime,
+	// }
 
-	res.Data = protos.Encode(&responseData)
+	// res.Data = protos.Encode(&responseData)
 	res.Call(c)
 }
 
@@ -98,29 +96,29 @@ func (ac *SSOController) VerifyAppToken(c *gin.Context) {
 		return
 	}
 
-	ua, exists := c.Get("userAgent")
-	if !exists {
-		res.Error = "UserAgent does not exist."
-		res.Code = 10002
-		res.Call(c)
-	}
-	userAgent := ua.(*sso.UserAgent)
-	// 4、校验登录
-	t, err := conf.GetSSO(data.AppId).AnonymousUser.GetAppToken("", "", userAgent)
+	// ua, exists := c.Get("userAgent")
+	// if !exists {
+	// 	res.Error = "UserAgent does not exist."
+	// 	res.Code = 10002
+	// 	res.Call(c)
+	// }
+	// userAgent := ua.(*sso.UserAgent)
+	// // 4、校验登录
+	// t, err := conf.GetSSO(data.AppId).AnonymousUser.GetAppToken("", "", userAgent)
 
-	if err != nil || t == nil || t.Token == "" {
-		res.Errors(err)
-		res.Code = 10018
-		res.Call(c)
-		return
-	}
-	// 6、合并用户数据
+	// if err != nil || t == nil || t.Token == "" {
+	// 	res.Errors(err)
+	// 	res.Code = 10018
+	// 	res.Call(c)
+	// 	return
+	// }
+	// // 6、合并用户数据
 
-	responseData := protos.CreateAppToken_Response{
-		Token:      t.Token,
-		CreateTime: t.CreateTime,
-	}
+	// responseData := protos.CreateAppToken_Response{
+	// 	Token:      t.Token,
+	// 	CreateTime: t.CreateTime,
+	// }
 
-	res.Data = protos.Encode(&responseData)
+	// res.Data = protos.Encode(&responseData)
 	res.Call(c)
 }

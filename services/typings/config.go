@@ -33,11 +33,9 @@ type SAaSS struct {
 	ApiVersion string
 }
 type Sso struct {
-	Host string
-	List map[string]struct {
-		AppId  string
-		AppKey string
-	}
+	Host   string
+	AppId  string
+	AppKey string
 }
 type Redis struct {
 	Addr     string

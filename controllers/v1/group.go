@@ -50,7 +50,7 @@ func (fc *GroupController) NewGroup(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 
 	appId := c.GetString("appId")
 
@@ -70,6 +70,12 @@ func (fc *GroupController) NewGroup(c *gin.Context) {
 		Type: "Join",
 		Uid:  userInfo.Uid,
 	})
+	protpData := protos.UpdateGroupStatus_Response{
+		Type:   "New",
+		RoomId: add.Id,
+		Uid:    []string{},
+	}
+
 	for _, v := range data.Members {
 		if v.Type == "Join" {
 			err := groupDbx.JoinGroupMembers(appId, add.Id, v.Uid)
@@ -79,6 +85,7 @@ func (fc *GroupController) NewGroup(c *gin.Context) {
 				res.Call(c)
 				return
 			}
+			protpData.Uid = append(protpData.Uid, v.Uid)
 		}
 	}
 
@@ -87,6 +94,17 @@ func (fc *GroupController) NewGroup(c *gin.Context) {
 	}
 	res.Data = protos.Encode(&responseData)
 	res.Call(c)
+
+	var sres response.ResponseProtobufType
+	sres.Code = 200
+	sres.Data = protos.Encode(&protpData)
+
+	for _, v := range protpData.Uid {
+		new(methods.SocketConn).BroadcastToUser(namespace["chat"], v,
+			routeEventName["updateGroupStatus"],
+			&sres)
+	}
+	log.Info("protpData.Uid", protpData.Uid)
 }
 
 func (fc *GroupController) GetAllJoinedGroups(c *gin.Context) {
@@ -111,7 +129,7 @@ func (fc *GroupController) GetAllJoinedGroups(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 
 	appId := c.GetString("appId")
 
@@ -198,6 +216,41 @@ func (fc *GroupController) GetGroupInfo(c *gin.Context) {
 	gr := new(protos.Group)
 	copier.Copy(gr, getGroup)
 
+	token := c.GetString("token")
+	if token != "" {
+		appId := c.GetString("appId")
+		deviceId := c.GetString("deviceId")
+		var userAgent *sso.UserAgent
+		if u, ok := c.Get("userAgent"); ok {
+			userAgent = u.(*sso.UserAgent)
+		}
+
+		v, err := conf.SSO.Verify(token, deviceId, userAgent)
+		// Log.Info("ret", ret, err)
+		if err != nil {
+			// Log.Info("jwt: ", err)
+			res.Errors(err)
+			res.Code = 10004
+			res.Call(c)
+			c.Abort()
+			return
+		}
+		if v != nil && v.UserInfo.Uid != "" {
+
+			getM := groupDbx.GetGroupMember(appId, data.GroupId, v.UserInfo.Uid, []int64{1, 0})
+			// log.Info("getM", getM)
+			if getM != nil {
+				gm := new(protos.GroupMembers)
+				copier.Copy(gm, getM)
+				if getM.LastMessage != primitive.NilObjectID {
+					gm.LastMessage = getM.LastMessage.Hex()
+				}
+				gr.OwnMemberInfo = gm
+			}
+
+		}
+	}
+
 	gr.Members = groupDbx.GetNumberOfGroupMembers(appId, data.GroupId)
 
 	responseData := protos.GetGroupInfo_Response{
@@ -254,7 +307,7 @@ func (fc *GroupController) GetGroupMembers(c *gin.Context) {
 		list = append(list, gm)
 	}
 
-	getUsers, err := conf.GetSSO(appId).AnonymousUser.GetAnonymousUserList(uids)
+	getUsers, err := conf.SSO.GetUsers(uids)
 	// log.Info("getUsers", getUsers)
 	if err != nil || len(getUsers) == 0 {
 		res.Errors(err)
@@ -264,7 +317,6 @@ func (fc *GroupController) GetGroupMembers(c *gin.Context) {
 	}
 
 	for i, j := 0, len(list)-1; i <= j; i, j = i+1, j-1 {
-		log.Info(i, j)
 		if j == i {
 			methods.FormatGroupMembers(list[i], getUsers)
 			break
@@ -301,7 +353,7 @@ func (fc *GroupController) LeaveGroup(c *gin.Context) {
 	if err = validation.ValidateStruct(
 		data,
 		validation.Parameter(&data.GroupId, validation.Type("string"), validation.Required()),
-		validation.Parameter(&data.Uid, validation.Type("string"), validation.Required()),
+		validation.Parameter(&data.Uid, validation.Required()),
 	); err != nil {
 		res.Errors(err)
 		res.Code = 10002
@@ -315,32 +367,90 @@ func (fc *GroupController) LeaveGroup(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 
 	appId := c.GetString("appId")
 
-	if data.Uid != userInfo.Uid {
-		// 未来需要判断是不是创建人
-		res.Code = 10302
+	getGroup, err := groupDbx.GetGroup(appId, data.GroupId)
+	// log.Info("getGroup", getGroup, appId, data.GroupId)
+	if getGroup == nil {
+		res.Errors(err)
+		res.Code = 10306
 		res.Call(c)
 		return
 	}
-	getM := groupDbx.GetGroupMember(appId, data.GroupId, data.Uid, []int64{1, 0})
-	log.Info("getM", getM)
-	if getM == nil {
-		res.Code = 10305
-		res.Call(c)
-		return
+
+	allow := false
+
+	// 需要判断是不是创建人
+	if userInfo.Uid == getGroup.AuthorId {
+		allow = true
+		// res.Code = 10302
+		// res.Call(c)
+		// return
+	} else {
+		// 未来判断是否是管理员
+		allow = false
+
+		// getM := groupDbx.GetGroupMember(appId, data.GroupId, userInfo.Uid, []int64{1, 0})
+		// if getM == nil {
+		// 	res.Code = 10305
+		// 	res.Call(c)
+		// 	return
+		// }
 	}
-	if err = groupDbx.LeaveGroup(appId, data.GroupId, data.Uid); err != nil {
-		res.Code = 10304
+
+	if !allow {
+		// 判断该群组是不是允许其他人邀请加入(预留)
+		// allow = false
+		allow = true
+
+		// 判断是不是自己在申请
+		// 自己申请只有一个人
+		if len(data.Uid) == 1 && data.Uid[0] == userInfo.Uid {
+			allow = true
+		}
+	}
+
+	if !allow {
+		res.Code = 10303
 		res.Call(c)
 		return
+
+	}
+	for _, v := range data.Uid {
+		getM := groupDbx.GetGroupMember(appId, data.GroupId, v, []int64{1, 0})
+		// log.Info("getM", getM)
+		if getM == nil {
+			res.Code = 10305
+			res.Call(c)
+			return
+		}
+		if err = groupDbx.LeaveGroup(appId, data.GroupId, v); err != nil {
+			res.Code = 10304
+			res.Call(c)
+			return
+		}
 	}
 
 	responseData := protos.LeaveGroup_Response{}
 	res.Data = protos.Encode(&responseData)
 	res.Call(c)
+
+	var sres response.ResponseProtobufType
+	sres.Code = 200
+	sres.Data = protos.Encode(&protos.UpdateGroupStatus_Response{
+		Type:   "Leave",
+		RoomId: data.GroupId,
+		Uid:    data.Uid,
+	})
+
+	new(methods.SocketConn).BroadcastToRoomByDeviceId(namespace["chat"],
+		c.GetString("deviceId"),
+		data.GroupId,
+		routeEventName["updateGroupStatus"],
+		&sres,
+		true)
 }
 
 func (fc *GroupController) JoinGroup(c *gin.Context) {
@@ -363,7 +473,7 @@ func (fc *GroupController) JoinGroup(c *gin.Context) {
 	if err = validation.ValidateStruct(
 		data,
 		validation.Parameter(&data.GroupId, validation.Type("string"), validation.Required()),
-		validation.Parameter(&data.Uid, validation.Type("string"), validation.Required()),
+		validation.Parameter(&data.Uid, validation.Required()),
 		// validation.Parameter(&data.Remark, validation.Type("string"), validation.Required()),
 	); err != nil {
 		res.Errors(err)
@@ -378,7 +488,7 @@ func (fc *GroupController) JoinGroup(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 
 	appId := c.GetString("appId")
 
@@ -391,39 +501,60 @@ func (fc *GroupController) JoinGroup(c *gin.Context) {
 		return
 	}
 
-	if data.Uid != userInfo.Uid {
-		// 需要判断是不是创建人
-		if userInfo.Uid == getGroup.AuthorId {
-			// res.Code = 10302
-			// res.Call(c)
-			// return
-		} else {
-			// 未来判断是否是管理员
+	allow := false
 
-			// 判断是不是成员
-			getM := groupDbx.GetGroupMember(appId, data.GroupId, userInfo.Uid, []int64{1, 0})
-			if getM == nil {
-				res.Code = 10305
-				res.Call(c)
-				return
-			}
+	// 需要判断是不是创建人
+	if userInfo.Uid == getGroup.AuthorId {
+		allow = true
+		// res.Code = 10302
+		// res.Call(c)
+		// return
+	} else {
+		// 未来判断是否是管理员
+		allow = false
+
+		// getM := groupDbx.GetGroupMember(appId, data.GroupId, userInfo.Uid, []int64{1, 0})
+		// if getM == nil {
+		// 	res.Code = 10305
+		// 	res.Call(c)
+		// 	return
+		// }
+	}
+
+	if !allow {
+		// 判断该群组是不是允许其他人邀请加入(预留)
+		// allow = false
+		allow = true
+
+		// 判断是不是自己在申请
+		// 自己申请只有一个人
+		if len(data.Uid) == 1 && data.Uid[0] == userInfo.Uid {
+			allow = true
 		}
+	}
+
+	if !allow {
+		res.Code = 10303
+		res.Call(c)
+		return
 
 	}
 
 	// 预留 检测是否必须验证，验证则是存储验证记录。
 
-	getM := groupDbx.GetGroupMember(appId, data.GroupId, data.Uid, []int64{1, 0})
-	if getM != nil {
-		res.Code = 10307
-		res.Call(c)
-		return
-	}
+	for _, v := range data.Uid {
+		getM := groupDbx.GetGroupMember(appId, data.GroupId, v, []int64{1, 0})
+		if getM != nil {
+			res.Code = 10307
+			res.Call(c)
+			return
+		}
 
-	if err = groupDbx.JoinGroupMembers(appId, data.GroupId, data.Uid); err != nil {
-		res.Code = 10303
-		res.Call(c)
-		return
+		if err = groupDbx.JoinGroupMembers(appId, data.GroupId, v); err != nil {
+			res.Code = 10303
+			res.Call(c)
+			return
+		}
 	}
 
 	responseData := protos.JoinGroup_Response{
@@ -431,6 +562,28 @@ func (fc *GroupController) JoinGroup(c *gin.Context) {
 	}
 	res.Data = protos.Encode(&responseData)
 	res.Call(c)
+
+	var sres response.ResponseProtobufType
+	sres.Code = 200
+	sres.Data = protos.Encode(&protos.UpdateGroupStatus_Response{
+		Type:   "Join",
+		RoomId: data.GroupId,
+		Uid:    data.Uid,
+	})
+
+	sc := new(methods.SocketConn)
+	for _, v := range data.Uid {
+		sc.BroadcastToUser(namespace["chat"], v,
+			routeEventName["updateGroupStatus"],
+			&sres)
+	}
+
+	sc.BroadcastToRoomByDeviceId(namespace["chat"],
+		c.GetString("deviceId"),
+		data.GroupId,
+		routeEventName["updateGroupStatus"],
+		&sres,
+		false)
 }
 
 func (fc *GroupController) DisbandGroup(c *gin.Context) {
@@ -465,7 +618,7 @@ func (fc *GroupController) DisbandGroup(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 
 	appId := c.GetString("appId")
 
@@ -497,6 +650,21 @@ func (fc *GroupController) DisbandGroup(c *gin.Context) {
 		if err = groupDbx.AllMembersLeaveGroup(appId, data.GroupId); err != nil {
 			log.Info(err)
 		}
+
+		var sres response.ResponseProtobufType
+		sres.Code = 200
+		sres.Data = protos.Encode(&protos.UpdateGroupStatus_Response{
+			Type:   "Disband",
+			RoomId: data.GroupId,
+			// Uid:    userInfo.Uid,
+		})
+
+		new(methods.SocketConn).BroadcastToRoomByDeviceId(namespace["chat"],
+			c.GetString("deviceId"),
+			data.GroupId,
+			routeEventName["updateGroupStatus"],
+			&sres,
+			false)
 	}()
 
 	responseData := protos.DisbandGroup_Response{}

@@ -43,7 +43,7 @@ func (cc *ChatController) Connect(e *nsocketio.EventInstance) error {
 		return errors.New(res.Error)
 	}
 
-	userInfo := userInfoAny.(*sso.AnonymousUserInfo)
+	userInfo := userInfoAny.(*sso.UserInfo)
 	deviceId := baseNS.GetSessionCache("deviceId").(string)
 	log.Info("userInfo", userInfo)
 
@@ -93,7 +93,7 @@ func (cc *ChatController) JoinRoom(e *nsocketio.EventInstance) error {
 
 	appId := e.GetSessionCache("appId")
 	// deviceId := e.GetSessionCache("deviceId").(string)
-	userInfo := e.GetSessionCache("userInfo").(*sso.AnonymousUserInfo)
+	userInfo := e.GetSessionCache("userInfo").(*sso.UserInfo)
 
 	log.Info(data, data.RoomIds, appId, userInfo)
 
@@ -172,7 +172,7 @@ func (cc *ChatController) SendMessage(e *nsocketio.EventInstance) error {
 
 	appId := e.GetSessionCache("appId")
 	// deviceId := e.GetSessionCache("deviceId").(string)
-	userInfo := e.GetSessionCache("userInfo").(*sso.AnonymousUserInfo)
+	userInfo := e.GetSessionCache("userInfo").(*sso.UserInfo)
 
 	log.Info(data, appId, userInfo)
 	mp := models.Messages{
@@ -310,7 +310,7 @@ func (cc *ChatController) EditMessage(e *nsocketio.EventInstance) error {
 	}
 
 	// appId := e.GetSessionCache("appId")
-	userInfo := e.GetSessionCache("userInfo").(*sso.AnonymousUserInfo)
+	userInfo := e.GetSessionCache("userInfo").(*sso.UserInfo)
 
 	if data.AuthorId != userInfo.Uid {
 		res.Errors(err)
@@ -394,7 +394,7 @@ func (cc *ChatController) StartCalling(e *nsocketio.EventInstance) error {
 
 	// 3、获取参数
 	appId := e.GetSessionCache("appId").(string)
-	userInfo := e.GetSessionCache("userInfo").(*sso.AnonymousUserInfo)
+	userInfo := e.GetSessionCache("userInfo").(*sso.UserInfo)
 	authorId := userInfo.Uid
 
 	// 存储一个临时token到redis,每个用户一个 key由roomId和uid生成
@@ -478,7 +478,7 @@ func (cc *ChatController) Hangup(e *nsocketio.EventInstance) error {
 		return err
 	}
 	// 3、获取参数
-	userInfo := e.GetSessionCache("userInfo").(*sso.AnonymousUserInfo)
+	userInfo := e.GetSessionCache("userInfo").(*sso.UserInfo)
 	authorId := userInfo.Uid
 
 	// fmt.Println("fromUid", fromUid, toUids, typeStr)

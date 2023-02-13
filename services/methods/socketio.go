@@ -121,6 +121,21 @@ func (s *SocketConn) DecryptionQuery(data *protos.RequestType) error {
 	}
 	return nil
 }
+func (s *SocketConn) BroadcastToRoomByDeviceId(
+	namespace string,
+	deviceId string,
+	roomId string,
+	eventName string,
+	res *response.ResponseProtobufType,
+	sendToMyself bool) {
+
+	cc := conf.SocketIO.GetConnContextByTag(namespace, "DeviceId", deviceId)
+	if len(cc) == 0 {
+		return
+	}
+	s.Conn = cc[0]
+	s.BroadcastToRoom(roomId, eventName, res, sendToMyself)
+}
 
 func (s *SocketConn) BroadcastToRoom(
 	roomId string,
@@ -145,6 +160,26 @@ func (s *SocketConn) BroadcastToRoom(
 		}
 	}
 }
+func (s *SocketConn) BroadcastToUser(
+	namespace string,
+	uid string,
+	eventName string,
+	res *response.ResponseProtobufType) {
+	cc := conf.SocketIO.GetConnContextByTag(namespace, "Uid", uid)
+	if len(cc) == 0 {
+		return
+	}
+	log.Error("BroadcastToUser", len(cc))
+	for _, v := range cc {
+		cd := v.GetTag("DeviceId")
+		log.Info("BroadcastToUser", v.ID(), uid, v.GetTag("Uid"), cd, eventName)
+		if userAesKey := conf.EncryptionClient.GetUserAesKeyByDeviceId(conf.Redisdb, cd); userAesKey != nil {
+			log.Info(userAesKey.AESKey)
+			responseData := res.Encryption(userAesKey.AESKey, res.GetResponse())
+			v.Emit(eventName, responseData)
+		}
+	}
+}
 
 func (s *SocketConn) GetOnlineDeviceList(getConnContext []*nsocketio.ConnContext) ([]*protos.OnlineDeviceList, map[string]*protos.OnlineDeviceList) {
 	// log.Info("当前ID", c.ID())
@@ -165,8 +200,8 @@ func (s *SocketConn) GetOnlineDeviceList(getConnContext []*nsocketio.ConnContext
 		if cctxUserInfoInteface == nil {
 			continue
 		}
-		cctxSsoUser := new(protos.AnonymousUserInfo)
-		cctxUserInfo := cctxUserInfoInteface.(*sso.AnonymousUserInfo)
+		cctxSsoUser := new(protos.SSOUserInfo)
+		cctxUserInfo := cctxUserInfoInteface.(*sso.UserInfo)
 		copier.Copy(cctxSsoUser, cctxUserInfo)
 
 		// userAgent

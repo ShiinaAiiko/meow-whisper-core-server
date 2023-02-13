@@ -7,7 +7,7 @@ import (
 	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
 )
 
-var appIdDbx = dbxV1.AppIdDbx{}
+var appIdDbx = dbxV1.AppDbx{}
 
 func InitAppList() {
 

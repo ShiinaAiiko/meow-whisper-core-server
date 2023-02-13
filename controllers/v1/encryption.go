@@ -181,7 +181,7 @@ func (enc *EncryptionController) ExchangeKey(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	authorId := userInfo.(*sso.AnonymousUserInfo).Uid
+	authorId := userInfo.(*sso.UserInfo).Uid
 	deviceId := c.GetString("deviceId")
 
 	// 13、生成UserAesKey

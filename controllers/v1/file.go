@@ -65,7 +65,7 @@ func (fc *FileController) GetUploadFileToken(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	userInfo := u.(*sso.AnonymousUserInfo)
+	userInfo := u.(*sso.UserInfo)
 	authorId := userInfo.Uid
 
 	// 4、获取Token
@@ -110,7 +110,7 @@ func (fc *FileController) GetUploadFileToken(c *gin.Context) {
 	log.Info("	ut, err", ut, err)
 	if err != nil {
 		res.Errors(err)
-		res.Code = 10019
+		res.Code = 10014
 		res.Call(c)
 		return
 	}

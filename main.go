@@ -78,28 +78,11 @@ func main() {
 
 	methods.InitAppList()
 	// SSO Init
-	for _, v := range conf.Config.AppList {
-		ssoApp := conf.Config.SSO.List[v.AppId]
-		conf.SSOList[v.AppId] = sso.New(&sso.SakiSsoOptions{
-			AppId:  ssoApp.AppId,
-			AppKey: ssoApp.AppKey,
-			Host:   conf.Config.SSO.Host,
-			RedisOptions: &redis.Options{
-				Addr:     conf.Config.Redis.Addr,
-				Password: conf.Config.Redis.Password,
-				DB:       conf.Config.Redis.DB,
-			},
-		})
-	}
 	conf.SSO = sso.New(&sso.SakiSsoOptions{
-		AppId:  "conf.Config.SSO.AppId",
-		AppKey: "conf.Config.SSO.AppKey",
+		AppId:  conf.Config.SSO.AppId,
+		AppKey: conf.Config.SSO.AppKey,
 		Host:   conf.Config.SSO.Host,
-		RedisOptions: &redis.Options{
-			Addr:     conf.Config.Redis.Addr,
-			Password: conf.Config.Redis.Password,
-			DB:       conf.Config.Redis.DB,
-		},
+		Rdb:    conf.Redisdb,
 	})
 	conf.SAaSS = saass.New(&saass.Options{
 		AppId:      conf.Config.Saass.AppId,

@@ -36,6 +36,12 @@ var EventName = map[string](map[string](map[string]string)){
 			"recalledMessage": "RecalledMessage",
 			"deleteMessages":  "DeleteMessages",
 
+			// Contact
+			"updateContactStatus": "UpdateContactStatus",
+
+			// Group
+			"updateGroupStatus": "UpdateGroupStatus",
+
 			"startCallingMessage": "StartCallingMessage",
 			"hangupMessage":       "HangupMessage",
 		},

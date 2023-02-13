@@ -159,13 +159,20 @@ func (d *ContactDbx) GetAllContact(appId string, authorId string, chatTimeRange 
 		// 未来限制日期
 	}
 
-	log.Info("len(chatTimeRange) == 2", chatTimeRange, len(chatTimeRange) == 2)
+	// log.Info("len(chatTimeRange) == 2", chatTimeRange, len(chatTimeRange) == 2)
 	if len(chatTimeRange) == 2 {
 		match = append(match, bson.M{
 			"lastMessageTime": bson.M{
 				"$gt": chatTimeRange[0],
 			},
 		})
+		if chatTimeRange[1] != 0 {
+			match = append(match, bson.M{
+				"lastMessageTime": bson.M{
+					"$lte": chatTimeRange[1],
+				},
+			})
+		}
 	}
 	log.Info("match", match)
 

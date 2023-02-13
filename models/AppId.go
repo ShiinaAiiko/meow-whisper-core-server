@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type AppId struct {
+type App struct {
 	Id     primitive.ObjectID `bson:"_id" json:"id,omitempty"`
 	AppId  string             `bson:"appId" json:"appId,omitempty"`
 	AppKey string             `bson:"appKey" json:"appKey,omitempty"`
@@ -28,11 +28,11 @@ type AppId struct {
 	DeleteTime int64 `bson:"deleteTime" json:"deleteTime,omitempty"`
 }
 
-func (m *AppId) GetCollectionName() string {
-	return "AppId"
+func (m *App) GetCollectionName() string {
+	return "App"
 }
 
-func (m *AppId) Default() error {
+func (m *App) Default() error {
 	if m.Id == primitive.NilObjectID {
 		m.Id = primitive.NewObjectID()
 	}
@@ -59,11 +59,11 @@ func (m *AppId) Default() error {
 	return nil
 }
 
-func (m *AppId) GetCollection() *mongo.Collection {
+func (m *App) GetCollection() *mongo.Collection {
 	return mongodb.GetCollection(conf.Config.Mongodb.Currentdb.Name, m.GetCollectionName())
 }
 
-func (m *AppId) Validate() error {
+func (m *App) Validate() error {
 	errStr := ""
 	err := validation.ValidateStruct(
 		m,
