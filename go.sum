@@ -1,9 +1,9 @@
 github.com/cespare/xxhash/v2 v2.1.2 h1:YRXhKfTDauu4ajMg1TPgFO5jnlC2HCbmLXMcTG5cbYE=
 github.com/cespare/xxhash/v2 v2.1.2/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
-github.com/cherrai/nyanyago-utils v1.0.0 h1:WjHq7fwq0IvuzkYsFmE25LvI7TBoI4gbdI4rVLYk9Os=
+github.com/cherrai/nyanyago-utils v1.0.0 h1:nEE/CpPoCAi4i9QLRu/rCBtw4Auo8q8MdJv8HAAuwUo=
 github.com/cherrai/nyanyago-utils v1.0.0/go.mod h1:KXSbyf7JBhBQlcQDqV/qerizS+RJXLUSIY0QxMHWTlE=
-github.com/cherrai/saki-sso-go v1.0.0 h1:IZOPXUSao0SzNPfclqieumUaEfQXEUflo0uTSpm61p0=
-github.com/cherrai/saki-sso-go v1.0.0/go.mod h1:ug7LGQJP0VBJ40U5Ch67W5q4GpdA7f5d+Drfuq3IEcc=
+github.com/cherrai/saki-sso-go v1.0.0 h1:h1LXU3gYSwl6t5ZBwtsyWd7vcpyGHx1HAQCsJBdSW9g=
+github.com/cherrai/saki-sso-go v1.0.0/go.mod h1:enaLet1yppfu5gkNATEROJga++XjwwNpq3tZ+j11HCY=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
