@@ -67,7 +67,7 @@ func (fc *CallController) VerifyCallToken(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-	conf.Redisdb.Delete(rKey.GetKey(data.AppId + data.RoomId + data.Uid))
+	// conf.Redisdb.Delete(rKey.GetKey(data.AppId + data.RoomId + data.Uid))
 
 	res.Code = 200
 
