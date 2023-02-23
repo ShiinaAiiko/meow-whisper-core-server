@@ -16,8 +16,11 @@ var (
 	SSO    *sso.SakiSSO
 	SAaSS  *saass.SAaSS
 	// SSOList map[string]*sso.SakiSSO = map[string]*sso.SakiSSO{}
-	log = nlog.New()
+	Log = nlog.New()
+	// Log = nlog.Nil()
 )
+
+var log = Log
 
 // func GetSSO(appId string) *sso.SakiSSO {
 // 	return SSOList[appId]

@@ -47,7 +47,7 @@ func (fc *CallController) VerifyCallToken(c *gin.Context) {
 		res.Call(c)
 		return
 	}
-
+	log.Info(data.AppId, data.AppKey)
 	if !methods.CheckApp(data.AppId, data.AppKey) {
 		res.Code = 10017
 		res.Call(c)

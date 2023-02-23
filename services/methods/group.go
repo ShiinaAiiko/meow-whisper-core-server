@@ -9,16 +9,16 @@ import (
 
 func FormatGroupMembers(gm *protos.GroupMembers, users []*sso.UserInfo) {
 	for i, j := 0, len(users)-1; i <= j; i, j = i+1, j-1 {
-		if FormatGroupMembersSimpleAnonymousUserInfo(gm, users[i]) {
+		if FormatGroupMembersSimpleUserInfo(gm, users[i]) {
 			break
 		}
-		if FormatGroupMembersSimpleAnonymousUserInfo(gm, users[j]) {
+		if FormatGroupMembersSimpleUserInfo(gm, users[j]) {
 			break
 		}
 	}
 }
 
-func FormatGroupMembersSimpleAnonymousUserInfo(gm *protos.GroupMembers, user *sso.UserInfo) bool {
+func FormatGroupMembersSimpleUserInfo(gm *protos.GroupMembers, user *sso.UserInfo) bool {
 	if user.Uid == gm.AuthorId {
 		sa := new(protos.SimpleSSOUserInfo)
 		copier.Copy(sa, user)

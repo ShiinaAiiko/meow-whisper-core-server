@@ -338,6 +338,29 @@ func (d *GroupDbx) DisbandGroup(appId, groupId, authorId string) error {
 	return nil
 }
 
+func (d *GroupDbx) UpdateGroupInfo(appId, groupId, name, avatar string) error {
+	m := new(models.Group)
+	result, err := m.GetCollection().UpdateOne(context.TODO(),
+		bson.M{
+			"appId": appId,
+			"_id":   groupId,
+		}, bson.M{
+			"$set": bson.M{
+				"name":           name,
+				"avatar":         avatar,
+				"lastUpdateTime": time.Now().Unix(),
+			},
+		}, options.Update().SetUpsert(false))
+
+	if err != nil {
+		return err
+	}
+	if result.ModifiedCount == 0 {
+		return errors.New("update failed")
+	}
+	return nil
+}
+
 func (d *GroupDbx) AllMembersLeaveGroup(appId, groupId string) error {
 	m := new(models.GroupMembers)
 	result, err := m.GetCollection().UpdateMany(context.TODO(),

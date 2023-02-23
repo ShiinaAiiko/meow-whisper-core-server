@@ -52,6 +52,7 @@ type Group struct {
 	Status          int64              `bson:"status" json:"status,omitempty"`
 	CreateTime      int64              `bson:"createTime" json:"createTime,omitempty"`
 	DeleteTime      int64              `bson:"deleteTime" json:"deleteTime,omitempty"`
+	LastUpdateTime  int64              `bson:"lastUpdateTime" json:"lastUpdateTime,omitempty"`
 	LastMessage     primitive.ObjectID `bson:"lastMessage" json:"lastMessage,omitempty"`
 	LastMessageTime int64              `bson:"lastMessageTime" json:"lastMessageTime,omitempty"`
 }
@@ -81,6 +82,9 @@ func (m *Group) Default() error {
 	}
 	if m.DeleteTime == 0 {
 		m.DeleteTime = -1
+	}
+	if m.LastUpdateTime == 0 {
+		m.LastUpdateTime = time.Now().Unix()
 	}
 	if m.LastMessageTime == 0 {
 		m.LastMessageTime = time.Now().Unix()
@@ -116,6 +120,7 @@ func (m *Group) Validate() error {
 		validation.Parameter(&m.Status, validation.Enum([]int64{1, 0, -1})),
 		validation.Parameter(&m.CreateTime, validation.Required()),
 		validation.Parameter(&m.DeleteTime, validation.Required()),
+		validation.Parameter(&m.LastUpdateTime, validation.Required()),
 		validation.Parameter(&m.LastMessageTime, validation.Required()),
 	)
 	if err != nil {

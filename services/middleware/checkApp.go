@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
 	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
 
 	"github.com/gin-gonic/gin"
@@ -37,7 +38,7 @@ func CheckApp() gin.HandlerFunc {
 					break
 				}
 			}
-			if appId == "" {
+			if appId == "" || !methods.CheckAppId(appId) {
 				res.Code = 10017
 				res.Call(c)
 				// Log.Info(res)

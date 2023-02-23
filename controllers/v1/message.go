@@ -390,6 +390,7 @@ func (fc *MessageController) DeleteMessages(c *gin.Context) {
 	userInfo := u.(*sso.UserInfo)
 	deviceId := c.GetString("deviceId")
 
+	log.Info("data.Type", data.Type)
 	if data.Type == "MySelf" {
 		// 操作所有人发的 加自己Uid
 		if err = messagesDbx.DeleteMessages(data.RoomId, data.MessageIdList, userInfo.Uid, "All", userInfo.Uid, data.ExpirationTime); err != nil {
@@ -401,6 +402,7 @@ func (fc *MessageController) DeleteMessages(c *gin.Context) {
 	} else {
 		// 操作别人发的 加自己的Uid
 		if err = messagesDbx.DeleteMessages(data.RoomId, data.MessageIdList, userInfo.Uid, "false", userInfo.Uid, data.ExpirationTime); err != nil {
+			log.Info(err)
 			res.Errors(err)
 			res.Code = 10019
 			res.Call(c)
@@ -409,6 +411,7 @@ func (fc *MessageController) DeleteMessages(c *gin.Context) {
 
 		// 操作自己发的 加AllUser
 		if err = messagesDbx.DeleteMessages(data.RoomId, data.MessageIdList, userInfo.Uid, "true", "AllUser", data.ExpirationTime); err != nil {
+			log.Info(err)
 			res.Errors(err)
 			res.Code = 10019
 			res.Call(c)

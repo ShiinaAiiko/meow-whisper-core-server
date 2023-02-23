@@ -6,14 +6,13 @@ import (
 	"github.com/ShiinaAiiko/meow-whisper-core/services/gin_service"
 	socketioMiddleware "github.com/ShiinaAiiko/meow-whisper-core/services/middleware/socket.io"
 
-	"github.com/cherrai/nyanyago-utils/nlog"
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 	"github.com/gin-gonic/gin"
 	socketio "github.com/googollee/go-socket.io"
 )
 
 var (
-	log = nlog.New()
+	log = conf.Log
 )
 var Server *socketio.Server
 
@@ -46,6 +45,7 @@ func Init() {
 			Prefix:  "socket.io",
 			Network: "tcp",
 		},
+		// Log: log,
 	})
 
 	// 处理中间件

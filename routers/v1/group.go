@@ -59,4 +59,8 @@ func (r Routerv1) InitGroup() {
 	r.Group.POST(
 		role.SetRole(apiUrl["disbandGroup"], &protoOption),
 		c.DisbandGroup)
+
+	r.Group.POST(
+		role.SetRole(apiUrl["updateGroupInfo"], &protoOption),
+		c.UpdateGroupInfo)
 }

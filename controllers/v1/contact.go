@@ -360,10 +360,14 @@ func (fc *ContactController) DeleteContact(c *gin.Context) {
 	})
 
 	msc := methods.SocketConn{}
+
 	// 暂定只有1v1需要加密e2ee，其他的用自己的即可
 	msc.BroadcastToUser(namespace["chat"], data.Uid,
 		routeEventName["updateContactStatus"],
 		&sres)
+	for _, v := range added.Users {
+		msc.LeaveRoom(namespace["chat"], v.Uid, added.Id)
+	}
 }
 
 func (fc *ContactController) GetContactList(c *gin.Context) {

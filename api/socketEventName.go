@@ -41,9 +41,12 @@ var EventName = map[string](map[string](map[string]string)){
 
 			// Group
 			"updateGroupStatus": "UpdateGroupStatus",
+			"updateGroupInfo":   "UpdateGroupInfo",
 
-			"startCallingMessage": "StartCallingMessage",
-			"hangupMessage":       "HangupMessage",
+			// Call
+			"startCallingMessage":   "StartCallingMessage",
+			"hangupMessage":         "HangupMessage",
+			"callReconnectMessages": "CallReconnectMessages",
 		},
 		"requestEventName": {
 			"joinRoom": "JoinRoom",
@@ -55,9 +58,12 @@ var EventName = map[string](map[string](map[string]string)){
 			// 通过roomId 阅读该房间的所有消息
 			"readAllMessage": "ReadAllMessage",
 			"recallMessage":  "RecallMessage",
+
+			// Call
 			// 以roomId为单位，可以选择哪些用户参与
-			"startCalling": "StartCalling",
-			"hangup":       "Hangup",
+			"startCalling":  "StartCalling",
+			"hangup":        "Hangup",
+			"callReconnect": "CallReconnect",
 		},
 	},
 }

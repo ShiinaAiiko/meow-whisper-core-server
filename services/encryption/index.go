@@ -24,7 +24,7 @@ type EncryptionOption struct {
 
 var (
 	ctx = context.Background()
-	log = nlog.New()
+	log = nlog.Nil()
 )
 
 type NewOption struct {

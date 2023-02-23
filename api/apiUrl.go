@@ -24,7 +24,7 @@ var ApiUrls = map[string](map[string]string){
 		"getAllJoinedGroups": "/group/list/joined/get",
 		"getGroupInfo":       "/group/info/get",
 		"disbandGroup":       "/group/disband",
-		"updateGroup":        "/group/update",
+		"updateGroupInfo":    "/group/update/info",
 		// type OnlyAdd/FullAccess
 		"getGroupMembers":    "/group/members/get",
 		"joinGroup":          "/group/members/join",
@@ -61,7 +61,9 @@ var ApiUrls = map[string](map[string]string){
 		"getUserInfoList": "/user/info/list/get",
 
 		// File
-		"getUploadFileToken": "/file/uplpad/token/get",
+		"getUploadFileToken":               "/file/uplpad/token/get",
+		"getCustomStickersUploadFileToken": "/file/customStickers/uplpad/token/get",
+		"getCustomStickersFileUrl":         "/file/customStickers/url/get",
 
 		// call
 		"verifyCallToken": "/call/token/verify",

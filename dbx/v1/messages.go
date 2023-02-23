@@ -282,6 +282,9 @@ func (d *MessagesDbx) DeleteMessages(
 	if err != nil {
 		return err
 	}
+	if result.MatchedCount == 0 {
+		return nil
+	}
 	if result.ModifiedCount == 0 {
 		return errors.New("delete failed")
 	}

@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/cherrai/nyanyago-utils/nint"
+	"github.com/cherrai/nyanyago-utils/nstrings"
 	"github.com/cherrai/nyanyago-utils/validation"
 	sso "github.com/cherrai/saki-sso-go"
 	"github.com/gin-gonic/gin"
@@ -418,20 +419,8 @@ func (fc *GroupController) LeaveGroup(c *gin.Context) {
 		return
 
 	}
-	for _, v := range data.Uid {
-		getM := groupDbx.GetGroupMember(appId, data.GroupId, v, []int64{1, 0})
-		// log.Info("getM", getM)
-		if getM == nil {
-			res.Code = 10305
-			res.Call(c)
-			return
-		}
-		if err = groupDbx.LeaveGroup(appId, data.GroupId, v); err != nil {
-			res.Code = 10304
-			res.Call(c)
-			return
-		}
-	}
+
+	sc := new(methods.SocketConn)
 
 	responseData := protos.LeaveGroup_Response{}
 	res.Data = protos.Encode(&responseData)
@@ -445,12 +434,28 @@ func (fc *GroupController) LeaveGroup(c *gin.Context) {
 		Uid:    data.Uid,
 	})
 
-	new(methods.SocketConn).BroadcastToRoomByDeviceId(namespace["chat"],
+	sc.BroadcastToRoomByDeviceId(namespace["chat"],
 		c.GetString("deviceId"),
 		data.GroupId,
 		routeEventName["updateGroupStatus"],
 		&sres,
 		true)
+
+	for _, v := range data.Uid {
+		getM := groupDbx.GetGroupMember(appId, data.GroupId, v, []int64{1, 0})
+		// log.Info("getM", getM)
+		if getM == nil {
+			res.Code = 10305
+			res.Call(c)
+			return
+		}
+		if err = groupDbx.LeaveGroup(appId, data.GroupId, v); err != nil {
+			res.Code = 10304
+			res.Call(c)
+			return
+		}
+		sc.LeaveRoom(namespace["chat"], v, data.GroupId)
+	}
 }
 
 func (fc *GroupController) JoinGroup(c *gin.Context) {
@@ -650,6 +655,9 @@ func (fc *GroupController) DisbandGroup(c *gin.Context) {
 		if err = groupDbx.AllMembersLeaveGroup(appId, data.GroupId); err != nil {
 			log.Info(err)
 		}
+		sc := new(methods.SocketConn)
+
+		// sc.LeaveRoom(namespace["chat"], v, data.GroupId)
 
 		var sres response.ResponseProtobufType
 		sres.Code = 200
@@ -659,15 +667,92 @@ func (fc *GroupController) DisbandGroup(c *gin.Context) {
 			// Uid:    userInfo.Uid,
 		})
 
-		new(methods.SocketConn).BroadcastToRoomByDeviceId(namespace["chat"],
+		sc.BroadcastToRoomByDeviceId(namespace["chat"],
 			c.GetString("deviceId"),
 			data.GroupId,
 			routeEventName["updateGroupStatus"],
 			&sres,
 			false)
+
+		conf.SocketIO.ClearRoom(namespace["chat"], data.GroupId)
 	}()
 
 	responseData := protos.DisbandGroup_Response{}
 	res.Data = protos.Encode(&responseData)
 	res.Call(c)
+}
+
+func (fc *GroupController) UpdateGroupInfo(c *gin.Context) {
+	// 1、初始化返回体
+	var res response.ResponseProtobufType
+	res.Code = 200
+
+	// 2、获取参数
+	data := new(protos.UpdateGroupInfo_Request)
+	var err error
+	if err = protos.DecodeBase64(c.GetString("data"), data); err != nil {
+		res.Errors(err)
+		res.Code = 10002
+		res.Call(c)
+		return
+	}
+
+	// 3、校验参数
+	if err = validation.ValidateStruct(
+		data,
+		validation.Parameter(&data.GroupId, validation.Type("string"), validation.Required()),
+		validation.Parameter(&data.Name, validation.Type("string"), validation.Required()),
+	); err != nil {
+		res.Errors(err)
+		res.Code = 10002
+		res.Call(c)
+		return
+	}
+
+	u, isExists := c.Get("userInfo")
+	if !isExists {
+		res.Code = 10004
+		res.Call(c)
+		return
+	}
+	userInfo := u.(*sso.UserInfo)
+
+	appId := c.GetString("appId")
+
+	getGroup, err := groupDbx.GetGroup(appId, data.GroupId)
+	// log.Info("getGroup", getGroup, appId, data.GroupId)
+	if getGroup == nil {
+		res.Errors(err)
+		res.Code = 10306
+		res.Call(c)
+		return
+	}
+
+	// 需要判断是不是创建人
+	if getGroup.AuthorId != userInfo.Uid {
+		res.Code = 10302
+		res.Call(c)
+		return
+	}
+
+	if err = groupDbx.UpdateGroupInfo(appId, data.GroupId, data.Name, nstrings.StringOr(data.Avatar, getGroup.Avatar)); err != nil {
+		res.Code = 10011
+		res.Call(c)
+		return
+	}
+
+	responseData := protos.UpdateGroupInfo_Response{
+		GroupId: data.GroupId,
+		Avatar:  nstrings.StringOr(data.Avatar, getGroup.Avatar),
+		Name:    data.Name,
+	}
+	res.Data = protos.Encode(&responseData)
+	res.Call(c)
+
+	new(methods.SocketConn).BroadcastToRoomByDeviceId(namespace["chat"],
+		c.GetString("deviceId"),
+		data.GroupId,
+		routeEventName["updateGroupInfo"],
+		&res,
+		true)
 }

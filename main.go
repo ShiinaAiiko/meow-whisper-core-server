@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	log = nlog.New()
+	log = conf.Log
 )
 
 func main() {
@@ -69,7 +69,7 @@ func main() {
 		Addr:     conf.Config.Redis.Addr,
 		Password: conf.Config.Redis.Password, // no password set
 		DB:       conf.Config.Redis.DB,       // use default DB
-	}, conf.BaseKey)
+	}, conf.BaseKey, log)
 	conf.Redisdb.CreateKeys(conf.RedisCacheKeys)
 
 	// Connect to mongodb.
@@ -83,6 +83,7 @@ func main() {
 		AppKey: conf.Config.SSO.AppKey,
 		Host:   conf.Config.SSO.Host,
 		Rdb:    conf.Redisdb,
+		Log:    log,
 	})
 	conf.SAaSS = saass.New(&saass.Options{
 		AppId:      conf.Config.Saass.AppId,

@@ -4,6 +4,8 @@ import (
 
 	// "github.com/cherrai/saki-sso-go"
 
+	"errors"
+
 	"github.com/ShiinaAiiko/meow-whisper-core/api"
 	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
 	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
@@ -11,7 +13,6 @@ import (
 	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
 	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
 	"github.com/ShiinaAiiko/meow-whisper-core/services/typings"
-	"github.com/cherrai/nyanyago-utils/nlog"
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 	sso "github.com/cherrai/saki-sso-go"
 	"github.com/jinzhu/copier"
@@ -22,7 +23,7 @@ var (
 	messagesDbx      = dbxV1.MessagesDbx{}
 	contactDbx       = dbxV1.ContactDbx{}
 	groupDbx         = dbxV1.GroupDbx{}
-	log              = nlog.New()
+	log              = conf.Log
 	namespace        = api.Namespace[api.ApiVersion]
 	routeEventName   = api.EventName[api.ApiVersion]["routeEventName"]
 	requestEventName = api.EventName[api.ApiVersion]["requestEventName"]
@@ -89,6 +90,13 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 	// ntimer.SetTimeout(func() {
 	// 	defer c.Close()
 	// }, 3000)
+
+	if !methods.CheckAppId(queryData.AppId) {
+		res.Code = 10017
+		c.Emit(routeEventName["error"], res.GetResponse())
+		go c.Close()
+		return errors.New(res.Msg)
+	}
 
 	ua := new(sso.UserAgent)
 	copier.Copy(ua, queryData.UserAgent)

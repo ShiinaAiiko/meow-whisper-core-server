@@ -1,15 +1,16 @@
 package middleware
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
 	"reflect"
 
-	"github.com/cherrai/nyanyago-utils/nlog"
+	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
+	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+
 	"github.com/gin-gonic/gin"
 )
 
 var (
-	Log = nlog.New()
+	log = conf.Log
 )
 
 func Error() gin.HandlerFunc {
@@ -20,7 +21,7 @@ func Error() gin.HandlerFunc {
 			// fmt.Println("roles1", roles)
 			// fmt.Println("Error mid getRoles", roles.ResponseDataType)
 			if err := recover(); err != nil {
-				Log.FullCallChain("<"+c.Request.URL.Path+">"+" Gin Error: "+err.(error).Error(), "Error")
+				log.FullCallChain("<"+c.Request.URL.Path+">"+" Gin Error: "+err.(error).Error(), "Error")
 
 				var res response.ResponseProtobufType
 				res.Code = 10001

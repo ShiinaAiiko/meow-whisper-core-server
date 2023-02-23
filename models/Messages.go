@@ -43,6 +43,8 @@ type MessagesImage struct {
 	Url    string `bson:"url" json:"url"`
 	Width  int64  `bson:"width" json:"width"`
 	Height int64  `bson:"height" json:"height"`
+	// 'image/gif' | 'image/jpeg'
+	Type string `bson:"type" json:"type"`
 }
 type MessagesFile struct {
 	// Url

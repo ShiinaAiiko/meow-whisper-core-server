@@ -31,6 +31,9 @@ type SAaSS struct {
 	AppKey     string
 	BaseUrl    string
 	ApiVersion string
+	Auth       struct {
+		Duration int64
+	}
 }
 type Sso struct {
 	Host   string

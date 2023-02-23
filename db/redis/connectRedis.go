@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/cherrai/nyanyago-utils/nlog"
+	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -13,7 +13,7 @@ var Rdb *redis.Client
 var ctx = context.Background()
 
 var (
-	Log = nlog.New()
+	Log = conf.Log
 )
 
 func ConnectRedis(option *redis.Options) {

@@ -131,7 +131,7 @@ func ConvertResponseJson(jsonStr []byte) (sso.UserInfo, error) {
 	var m sso.UserInfo
 	err := json.Unmarshal([]byte(jsonStr), &m)
 	if err != nil {
-		Log.Info("Unmarshal with error: %+v\n", err)
+		log.Info("Unmarshal with error: %+v\n", err)
 		return m, err
 	}
 	return m, nil

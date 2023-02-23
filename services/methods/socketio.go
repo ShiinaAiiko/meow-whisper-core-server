@@ -144,6 +144,7 @@ func (s *SocketConn) BroadcastToRoom(
 	sendToMyself bool) {
 	cd := s.Conn.GetTag("DeviceId")
 	ccList := s.Conn.GetAllConnContextInRoomWithNamespace(roomId)
+	// log.Info("ccList", ccList, roomId)
 	for _, v := range ccList {
 		vd := v.GetTag("DeviceId")
 		if !sendToMyself && cd == vd {
@@ -229,4 +230,16 @@ func (s *SocketConn) GetOnlineDeviceList(getConnContext []*nsocketio.ConnContext
 	}
 
 	return onlineDeviceList, onlineDeviceListMap
+}
+
+func (s *SocketConn) LeaveRoom(namespace, uid, roomId string) {
+	cc := conf.SocketIO.GetConnContextByTag(namespace, "Uid", uid)
+	if len(cc) == 0 {
+		return
+	}
+
+	for _, v := range cc {
+		v.LeaveRoom(namespace, roomId)
+	}
+
 }
