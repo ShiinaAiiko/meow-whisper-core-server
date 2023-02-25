@@ -26,7 +26,49 @@ func (d *MessagesDbx) SendMessage(message *models.Messages) (*models.Messages, e
 	return message, nil
 }
 
-func (d *MessagesDbx) GetAllUnredMessages(roomIds []string, authorId string) ([]*models.Messages, error) {
+func (d *MessagesDbx) GetAllUnredMessages() ([]*models.Messages, error) {
+	m := new(models.Messages)
+
+	params := []bson.M{
+		{
+			"$match": bson.M{
+				"$or": []bson.M{
+					{
+						"readUsers": bson.M{
+							"$size": 0,
+						},
+						// "deletedUsers.uid": bson.M{
+						// 	"$nin": []string{authorId, "AllUser"},
+						// },
+						"status": bson.M{
+							"$in": []int64{1},
+						},
+					},
+				},
+				// and groupId
+			},
+		}, {
+			"$sort": bson.M{
+				"createTime": 1,
+			},
+		},
+	}
+	log.Info("params", params)
+	var results []*models.Messages
+	opts, err := m.GetCollection().Aggregate(context.TODO(), params)
+	if err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+	if err = opts.All(context.TODO(), &results); err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+	// log.Info(*results[0])
+	return results, nil
+}
+
+func (d *MessagesDbx) GetUnredMessages(roomIds []string, authorId string) ([]*models.Messages, error) {
 	m := new(models.Messages)
 
 	params := []bson.M{
@@ -56,7 +98,7 @@ func (d *MessagesDbx) GetAllUnredMessages(roomIds []string, authorId string) ([]
 			},
 		},
 	}
-	log.Info("params", params)
+	// log.Info("params", params)
 	var results []*models.Messages
 	opts, err := m.GetCollection().Aggregate(context.TODO(), params)
 	if err != nil {

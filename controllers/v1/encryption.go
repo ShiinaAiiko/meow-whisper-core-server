@@ -10,6 +10,7 @@ import (
 	"github.com/ShiinaAiiko/meow-whisper-core/protos"
 	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
 
+	"github.com/cherrai/dhkea-go"
 	"github.com/cherrai/nyanyago-utils/cipher"
 	"github.com/cherrai/nyanyago-utils/validation"
 
@@ -138,7 +139,7 @@ func (enc *EncryptionController) ExchangeKey(c *gin.Context) {
 	// log.Info("Data.DHPublicKey", data.DHPublicKey, dhPublicKey.Trim(`"`))
 
 	// 9、生成秘钥
-	dh := cipher.DHKeaNew(1024)
+	dh := dhkea.DHKeaNew(1024)
 	bi := new(big.Int)
 	bi.SetString(dhPublicKey.Trim(`"`), 10)
 	// log.Info("dh", dh.PublicKey)

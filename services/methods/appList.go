@@ -47,6 +47,7 @@ func InitAppList() {
 	// }, 2000)
 }
 
+
 func CheckApp(appId, appKey string) bool {
 	for _, v := range conf.Config.AppList {
 		if v.AppId == appId && v.AppKey == appKey {

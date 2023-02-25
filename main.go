@@ -77,6 +77,8 @@ func main() {
 	mongodb.ConnectMongoDB(conf.Config.Mongodb.Ssodb.Uri, conf.Config.Mongodb.Ssodb.Name)
 
 	methods.InitAppList()
+	methods.WatchEmailNotification()
+
 	// SSO Init
 	conf.SSO = sso.New(&sso.SakiSsoOptions{
 		AppId:  conf.Config.SSO.AppId,
@@ -103,5 +105,5 @@ func main() {
 	gin_service.Init()
 
 	// time.Sleep(time.Second * time.Duration(1))
-	gin_service.Init()
+	// gin_service.Init()
 }

@@ -428,3 +428,40 @@ func (d *GroupDbx) UpdateGroupMemberChatStatus(roomId string, messageId primitiv
 	}
 	return nil
 }
+
+func (d *GroupDbx) GetGroupMembersInDB() ([]*models.GroupMembers, error) {
+	m := new(models.GroupMembers)
+
+	params := []bson.M{
+		{
+			"$match": bson.M{
+				"$and": []bson.M{
+					{
+						"status": bson.M{
+							"$in": []int64{1, 0},
+						},
+					},
+					// 未来限制日期
+				},
+				// and groupId
+			},
+		}, {
+			"$sort": bson.M{
+				"createTime": 1,
+			},
+		},
+	}
+	var results []*models.GroupMembers
+
+	opts, err := m.GetCollection().Aggregate(context.TODO(), params)
+	if err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+	if err = opts.All(context.TODO(), &results); err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+
+	return results, nil
+}

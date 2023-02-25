@@ -201,3 +201,43 @@ func (d *ContactDbx) GetAllContact(appId string, authorId string, chatTimeRange 
 	// log.Info(*results[0])
 	return results, nil
 }
+
+func (d *ContactDbx) GetAllContactsInDB() ([]*models.Contact, error) {
+	m := new(models.Contact)
+
+	match := []bson.M{
+		{
+			"status": bson.M{
+				"$in": []int64{1, 0},
+			},
+		},
+		// 未来限制日期
+	}
+
+	// log.Info("len(chatTimeRange) == 2", chatTimeRange, len(chatTimeRange) == 2)
+
+	params := []bson.M{
+		{
+			"$match": bson.M{
+				"$and": match,
+				// and groupId
+			},
+		}, {
+			"$sort": bson.M{
+				"createTime": 1,
+			},
+		},
+	}
+	var results []*models.Contact
+	opts, err := m.GetCollection().Aggregate(context.TODO(), params)
+	if err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+	if err = opts.All(context.TODO(), &results); err != nil {
+		// log.Error(err)
+		return nil, err
+	}
+	// log.Info(*results[0])
+	return results, nil
+}

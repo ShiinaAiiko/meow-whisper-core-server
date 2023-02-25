@@ -3,8 +3,6 @@ module github.com/ShiinaAiiko/meow-whisper-core
 go 1.18
 
 require (
-	// github.com/cherrai/nyanyago-utils v1.0.0
-	// github.com/cherrai/saki-sso-go v1.0.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/go-resty/resty/v2 v2.7.0
@@ -18,7 +16,8 @@ require (
 )
 
 require (
-	github.com/cherrai/nyanyago-utils v1.0.0
+	github.com/cherrai/dhkea-go v1.0.0
+	github.com/cherrai/nyanyago-utils v1.0.1
 	github.com/cherrai/saki-sso-go v1.0.0
 	github.com/google/uuid v1.3.0
 	github.com/lithammer/shortuuid v3.0.0+incompatible
@@ -28,6 +27,7 @@ require (
 // replace (
 // 	github.com/cherrai/nyanyago-utils => ../../../nyanya/nyanyago-utils
 // 	github.com/cherrai/saki-sso-go v1.0.0 => ../../../cherrai/saki-sso/saki-sso-go
+// // github.com/cherrai/dhkea-go v1.0.0 => ../../../cherrai/pkg/dhkea-go
 // )
 
 require (

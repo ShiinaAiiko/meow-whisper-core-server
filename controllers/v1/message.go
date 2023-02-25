@@ -121,7 +121,7 @@ func (fc *MessageController) GetRecentChatDialogueList(c *gin.Context) {
 	// 获取所有未读消息
 	log.Info("roomIds", roomIds)
 
-	allUnredMessages, err := messagesDbx.GetAllUnredMessages(
+	allUnredMessages, err := messagesDbx.GetUnredMessages(
 		roomIds, userInfo.Uid,
 	)
 	if err != nil {
