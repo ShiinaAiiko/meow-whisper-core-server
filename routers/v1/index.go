@@ -17,7 +17,6 @@ func (r Routerv1) Init() {
 	r.Group = r.Engine.Group(r.BaseUrl)
 	r.InitEncryption()
 	r.InitCall()
-	r.InitRoom()
 	r.InitUpload()
 	r.InitUser()
 	r.InitSSO()

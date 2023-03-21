@@ -17,8 +17,8 @@ require (
 
 require (
 	github.com/cherrai/dhkea-go v1.0.0
-	github.com/cherrai/nyanyago-utils v1.0.1
-	github.com/cherrai/saki-sso-go v1.0.0
+	github.com/cherrai/nyanyago-utils v1.0.2
+	github.com/cherrai/saki-sso-go v1.0.1
 	github.com/google/uuid v1.3.0
 	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/pion/turn/v2 v2.0.9
