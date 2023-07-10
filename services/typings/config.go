@@ -51,10 +51,6 @@ type Mongodb struct {
 		Name string
 		Uri  string
 	}
-	Ssodb struct {
-		Name string
-		Uri  string
-	}
 }
 type AppListItem struct {
 	AppId  string

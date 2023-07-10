@@ -74,7 +74,6 @@ func main() {
 
 	// Connect to mongodb.
 	mongodb.ConnectMongoDB(conf.Config.Mongodb.Currentdb.Uri, conf.Config.Mongodb.Currentdb.Name)
-	mongodb.ConnectMongoDB(conf.Config.Mongodb.Ssodb.Uri, conf.Config.Mongodb.Ssodb.Name)
 
 	methods.InitAppList()
 	methods.WatchEmailNotification()
