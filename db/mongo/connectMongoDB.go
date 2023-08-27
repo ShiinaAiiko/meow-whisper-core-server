@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

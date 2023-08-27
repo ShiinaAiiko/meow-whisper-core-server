@@ -1,7 +1,7 @@
 package socketioRouter
 
 import (
-	socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core/controllers/socketio/v1"
+	socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core-server/controllers/socketio/v1"
 	"github.com/cherrai/nyanyago-utils/nlog"
 )
 

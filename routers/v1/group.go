@@ -1,8 +1,8 @@
 package routerV1
 
 import (
-	controllersV1 "github.com/ShiinaAiiko/meow-whisper-core/controllers/v1"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/middleware"
+	controllersV1 "github.com/ShiinaAiiko/meow-whisper-core-server/controllers/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/middleware"
 )
 
 func (r Routerv1) InitGroup() {

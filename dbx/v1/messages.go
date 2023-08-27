@@ -5,7 +5,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/models"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/models"
 	"github.com/cherrai/nyanyago-utils/narrays"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

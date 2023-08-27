@@ -1,4 +1,4 @@
-module github.com/ShiinaAiiko/meow-whisper-core
+module github.com/ShiinaAiiko/meow-whisper-core-server
 
 go 1.18
 

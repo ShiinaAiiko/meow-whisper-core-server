@@ -1,9 +1,9 @@
 package controllersV1
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/methods"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/nyanyago-utils/validation"
 	"github.com/gin-gonic/gin"

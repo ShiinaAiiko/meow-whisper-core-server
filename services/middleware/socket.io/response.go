@@ -1,8 +1,8 @@
 package socketioMiddleware
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/services/encryption"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/encryption"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 )

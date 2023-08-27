@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/routers"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/middleware"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/routers"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/middleware"
 
 	"github.com/cherrai/nyanyago-utils/nlog"
 	"github.com/gin-gonic/gin"

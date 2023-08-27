@@ -1,8 +1,8 @@
 package socketioRouter
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core/controllers/socketio/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core-server/controllers/socketio/v1"
 
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 )

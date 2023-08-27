@@ -10,10 +10,10 @@ import (
 	"sort"
 	"strings"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/typings"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/typings"
 	"github.com/jinzhu/copier"
 
 	"github.com/cherrai/nyanyago-utils/cipher"

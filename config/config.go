@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/services/typings"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/typings"
 
 	"github.com/cherrai/nyanyago-utils/nlog"
 	"github.com/cherrai/nyanyago-utils/saass"

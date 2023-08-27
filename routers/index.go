@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	routerV1 "github.com/ShiinaAiiko/meow-whisper-core/routers/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	routerV1 "github.com/ShiinaAiiko/meow-whisper-core-server/routers/v1"
 
 	"github.com/gin-gonic/gin"
 )

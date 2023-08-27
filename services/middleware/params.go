@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 	sso "github.com/cherrai/saki-sso-go"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"

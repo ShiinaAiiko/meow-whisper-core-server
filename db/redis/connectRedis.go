@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
 	"github.com/go-redis/redis/v8"
 )
 

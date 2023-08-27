@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"strings"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/encryption"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/encryption"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	sso "github.com/cherrai/saki-sso-go"
 

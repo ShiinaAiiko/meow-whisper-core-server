@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/gin-gonic/gin"
 )

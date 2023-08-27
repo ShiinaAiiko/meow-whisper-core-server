@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"time"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/dhkea-go"
 	"github.com/cherrai/nyanyago-utils/cipher"

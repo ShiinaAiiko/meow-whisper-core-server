@@ -1,8 +1,8 @@
 package socketIoControllersV1
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 	"github.com/cherrai/nyanyago-utils/validation"

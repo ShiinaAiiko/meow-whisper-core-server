@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
 
 	"github.com/cherrai/nyanyago-utils/cipher"
 	"github.com/cherrai/nyanyago-utils/nlog"

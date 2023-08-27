@@ -3,8 +3,8 @@ package methods
 import (
 	"fmt"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core-server/dbx/v1"
 )
 
 var appIdDbx = dbxV1.AppDbx{}
@@ -46,7 +46,6 @@ func InitAppList() {
 	}
 	// }, 2000)
 }
-
 
 func CheckApp(appId, appKey string) bool {
 	for _, v := range conf.Config.AppList {

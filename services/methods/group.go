@@ -1,7 +1,7 @@
 package methods
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
 	"github.com/cherrai/nyanyago-utils/nstrings"
 	sso "github.com/cherrai/saki-sso-go"
 	"github.com/jinzhu/copier"

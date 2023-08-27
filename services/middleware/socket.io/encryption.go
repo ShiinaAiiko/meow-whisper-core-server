@@ -4,10 +4,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/encryption"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/encryption"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/nyanyago-utils/cipher"
 	"github.com/cherrai/nyanyago-utils/nsocketio"

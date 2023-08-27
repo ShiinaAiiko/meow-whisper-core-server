@@ -1,6 +1,6 @@
 package socketioRouter
 
-import socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core/controllers/socketio/v1"
+import socketIoControllersV1 "github.com/ShiinaAiiko/meow-whisper-core-server/controllers/socketio/v1"
 
 // 一对一聊天
 func (v *V1) InitUser() {

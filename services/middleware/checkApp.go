@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/methods"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/gin-gonic/gin"
 )

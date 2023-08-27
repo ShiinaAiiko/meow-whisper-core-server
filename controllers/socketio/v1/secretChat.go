@@ -1,11 +1,11 @@
 package socketIoControllersV1
 
 // import (
-// 	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-// 	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
-// 	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-// 	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
-// 	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+// 	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+// 	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core-server/dbx/v1"
+// 	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+// 	"github.com/ShiinaAiiko/meow-whisper-core-server/services/methods"
+// 	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 // 	"github.com/cherrai/nyanyago-utils/nsocketio"
 // 	"github.com/cherrai/nyanyago-utils/nstrings"

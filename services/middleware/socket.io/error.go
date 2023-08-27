@@ -3,7 +3,7 @@ package socketioMiddleware
 import (
 	"reflect"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
 
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 )

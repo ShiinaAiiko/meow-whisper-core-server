@@ -1,8 +1,8 @@
 package methods
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/models"
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/models"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
 	"github.com/jinzhu/copier"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

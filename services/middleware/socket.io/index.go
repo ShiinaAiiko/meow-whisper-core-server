@@ -1,8 +1,8 @@
 package socketioMiddleware
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
 )
 
 var (

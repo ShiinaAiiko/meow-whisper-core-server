@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	mongodb "github.com/ShiinaAiiko/meow-whisper-core/db/mongo"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	mongodb "github.com/ShiinaAiiko/meow-whisper-core-server/db/mongo"
 
 	"github.com/cherrai/nyanyago-utils/validation"
 	"go.mongodb.org/mongo-driver/bson/primitive"

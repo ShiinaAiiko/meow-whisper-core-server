@@ -1,10 +1,10 @@
 package socketio_service
 
 import (
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/routers/socketioRouter"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/gin_service"
-	socketioMiddleware "github.com/ShiinaAiiko/meow-whisper-core/services/middleware/socket.io"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/routers/socketioRouter"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/gin_service"
+	socketioMiddleware "github.com/ShiinaAiiko/meow-whisper-core-server/services/middleware/socket.io"
 
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 	"github.com/gin-gonic/gin"
@@ -45,7 +45,7 @@ func Init() {
 			Prefix:  "socket.io",
 			Network: "tcp",
 		},
-		// Log: log,
+		Log: log,
 	})
 
 	// 处理中间件
@@ -69,11 +69,11 @@ func Init() {
 // package socketio_service
 
 // import (
-// 	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-// 	"github.com/ShiinaAiiko/meow-whisper-core/routers/socketioRouter"
+// 	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+// 	"github.com/ShiinaAiiko/meow-whisper-core-server/routers/socketioRouter"
 
-// 	"github.com/ShiinaAiiko/meow-whisper-core/services/gin_service"
-// 	socketioMiddleware "github.com/ShiinaAiiko/meow-whisper-core/services/middleware/socket.io"
+// 	"github.com/ShiinaAiiko/meow-whisper-core-server/services/gin_service"
+// 	socketioMiddleware "github.com/ShiinaAiiko/meow-whisper-core-server/services/middleware/socket.io"
 
 // 	"github.com/cherrai/nyanyago-utils/nlog"
 // 	"github.com/cherrai/nyanyago-utils/nsocketio"

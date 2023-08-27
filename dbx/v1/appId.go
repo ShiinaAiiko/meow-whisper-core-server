@@ -3,7 +3,7 @@ package dbxV1
 import (
 	"context"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/models"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

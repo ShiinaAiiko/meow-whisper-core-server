@@ -6,13 +6,13 @@ import (
 
 	"errors"
 
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
-	"github.com/ShiinaAiiko/meow-whisper-core/protos"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/methods"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/response"
-	"github.com/ShiinaAiiko/meow-whisper-core/services/typings"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core-server/dbx/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/protos"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/methods"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/response"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/services/typings"
 	"github.com/cherrai/nyanyago-utils/nsocketio"
 	sso "github.com/cherrai/saki-sso-go"
 	"github.com/jinzhu/copier"
@@ -44,7 +44,7 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 	defer func() {
 		// fmt.Println("Error middleware.2222222222222")
 		if err := recover(); err != nil {
-			log.Info(err)
+			log.FullCallChain(err.(error).Error(), "Error")
 			res.Code = 10001
 			res.Data = err.(error).Error()
 			c.Emit(routeEventName["error"], res.GetResponse())
@@ -101,8 +101,9 @@ func (bc *BaseController) Connect(e *nsocketio.EventInstance) error {
 	ua := new(sso.UserAgent)
 	copier.Copy(ua, queryData.UserAgent)
 
+	log.Info("c.sessionCache", c)
 	getUser, err := conf.SSO.Verify(queryData.Token, queryData.DeviceId, ua)
-	// log.Info("getUser", getUser, err)
+	log.Info("getUser", getUser, err)
 	if err != nil || getUser == nil || getUser.UserInfo.Uid == "" {
 		res.Code = 10004
 		res.Data = "SSO Error: " + err.Error()

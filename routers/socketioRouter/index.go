@@ -1,9 +1,9 @@
 package socketioRouter
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	"github.com/ShiinaAiiko/meow-whisper-core/routers/socketioRouter/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/routers/socketioRouter/v1"
 )
 
 var namespace = api.Namespace[api.ApiVersion]

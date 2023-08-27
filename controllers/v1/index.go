@@ -1,9 +1,9 @@
 package controllersV1
 
 import (
-	"github.com/ShiinaAiiko/meow-whisper-core/api"
-	conf "github.com/ShiinaAiiko/meow-whisper-core/config"
-	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core/dbx/v1"
+	"github.com/ShiinaAiiko/meow-whisper-core-server/api"
+	conf "github.com/ShiinaAiiko/meow-whisper-core-server/config"
+	dbxV1 "github.com/ShiinaAiiko/meow-whisper-core-server/dbx/v1"
 )
 
 var (
