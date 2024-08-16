@@ -5,7 +5,7 @@ branch="main"
 # configFilePath="config.dev.json"
 configFilePath="config.pro.json"
 DIR=$(cd $(dirname $0) && pwd)
-allowMethods=("exec stop gitpull protos dockerremove start dockerlogs")
+allowMethods=("exec stop gitpull protos dockerremove start logs")
 
 gitpull() {
   echo "-> 正在拉取远程仓库"
@@ -30,14 +30,19 @@ start() {
   cp -r ~/.gitconfig $DIR
 
   echo "-> 准备构建Docker"
-  docker build -t $name $(cat /etc/hosts | sed 's/^#.*//g' | grep '[0-9][0-9]' | tr "\t" " " | awk '{print "--add-host="$2":"$1 }' | tr '\n' ' ') . -f Dockerfile.multi
+  docker build \
+    -t \
+    $name \
+    --network host \
+    $(cat /etc/hosts | sed 's/^#.*//g' | grep '[0-9][0-9]' | tr "\t" " " | awk '{print "--add-host="$2":"$1 }' | tr '\n' ' ') \
+    . \
+    -f Dockerfile.multi
   rm -rf $DIR/.ssh
   rm -rf $DIR/.gitconfig
   rm -rf $DIR/protos_temp
 
   echo "-> 准备运行Docker"
-  docker stop $name
-  docker rm $name
+  stop
   docker run \
     -v $DIR/$configFilePath:/config.json \
     -v $DIR/certs:/certs \
@@ -63,7 +68,7 @@ protos() {
   echo "-> 编译Protobuf成功"
 }
 
-dockerlogs() {
+logs() {
   docker logs -f $name
 }
 
