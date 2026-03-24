@@ -17,8 +17,8 @@ RUN \
   apk add bash && \
   apk add openssh  && \
   apk add protoc && \
-  go install google.golang.org/protobuf/cmd/protoc-gen-go@latest && \
-  go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest 
+  go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.34.1 && \
+  go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1 
 
 COPY  .ssh/ \
   /root/.ssh/
@@ -31,7 +31,7 @@ COPY go.mod \
   /app/
 
 RUN \
-  chmod -R 600 /root/.ssh/id_rsa && \ 
+  # chmod -R 600 /root/.ssh/id_rsa && \ 
   git config --global url."git@github.com:".insteadOf "https://github.com/" && \
   go mod download
 
@@ -49,7 +49,7 @@ WORKDIR /
 COPY --from=BUILD_IMAGE \
   /app/meow-whisper \
   /
-  
+
 EXPOSE 15310
 
 CMD ["./meow-whisper","--config","config.json"]
